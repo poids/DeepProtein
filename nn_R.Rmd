@@ -1,0 +1,52 @@
+---
+title: "NeuralNet R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r Import Libraries/Dependencies}
+library(readr)
+library(utils)
+
+#NN Packages
+# library(nnet) #NOT USED AT MOMENT
+library(neuralnet)
+```
+
+Import Data from UCI
+```{r Neural_Network}
+fileURL="https://archive.ics.uci.edu/ml/machine-learning-databases/ecoli/ecoli.data"
+eColi_df <- read.csv(fileURL, header = FALSE, sep = "", quote = "\"'")
+names(eColi_df) <- c("seq_name", "mcg", "gvh", "lip", "chg", "aac", 'alm1', 'alm2', 'loc_site')
+
+#Convert Columns to right format
+eColi_df$seq_name<-as.character(eColi_df$seq_name)
+eColi_df$loc_site<-as.character(eColi_df$loc_site)
+mapply(class, eColi_df)
+head(eColi_df)
+```
+
+Split into Train and test Set (Only Run Once)
+```{r}
+X_train_Names=eColi_df[sample(nrow(eColi_df), size = 0.70*nrow(eColi_df)),]['seq_name']
+X_train_Ind=as.integer(row.names(X_train_Names))
+X_ind=cbind.data.frame(X_train_Ind, X_train_Names)
+head(X_ind)
+mapply(class, X_ind)
+
+X_train_df=eColi_df[X_train_Ind,]
+X_test_df=eColi_df[!rownames(eColi_df) %in% X_train_Ind,]
+
+# Y_train_Ind=array(eColi_df[eColi_df['seq_name']!=X_train_Ind,]['seq_name']$seq_name)
+```
+
+```{r neural_net}
+#startweights=vector()
+#fastDummies::dummy_cols()
+```
+
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
